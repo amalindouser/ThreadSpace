@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import PropTypes from 'prop-types';
-import { useFormik } from 'formik';
+import { useFormik } from 'formi';
 
 // Function to validate email format
 function validateEmail(email) {
