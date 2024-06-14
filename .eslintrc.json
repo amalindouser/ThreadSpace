@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "cypress/globals": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb", "plugin:cypress/recommended"],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "cypress", "cypress"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "max-len": "off",
+    "no-console": "off",
+    "react/jsx-props-no-spreading": "off"
+  }
+}
