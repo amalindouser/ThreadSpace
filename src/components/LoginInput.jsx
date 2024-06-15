@@ -12,6 +12,7 @@ import {
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
+import useInput from '../hooks/useInput';
 
 // Function to validate email format
 function validateEmail(email) {
@@ -22,6 +23,9 @@ function validateEmail(email) {
 export default function LoginInput({ login }) {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const email = useInput('');
+  const password = useInput('');
 
   const handleClickVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -53,6 +57,8 @@ export default function LoginInput({ login }) {
       login(values)
         .then(() => {
           setErrorMessage('');
+          email.resetValue(); // Reset email input
+          password.resetValue(); // Reset password input
         })
         .catch((error) => {
           setErrorMessage('Invalid email or password'); // Set custom error message
@@ -70,7 +76,12 @@ export default function LoginInput({ login }) {
         <Input
           type="email"
           focusBorderColor="#63B3ED"
-          {...formik.getFieldProps('email')}
+          value={email.value}
+          onChange={(e) => {
+            email.handleValueChange(e);
+            formik.setFieldValue('email', e.target.value);
+          }}
+          onBlur={formik.handleBlur}
           placeholder="Email"
           aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
         />
@@ -84,7 +95,12 @@ export default function LoginInput({ login }) {
           <Input
             type={showPassword ? 'text' : 'password'}
             focusBorderColor="#63B3ED"
-            {...formik.getFieldProps('password')}
+            value={password.value}
+            onChange={(e) => {
+              password.handleValueChange(e);
+              formik.setFieldValue('password', e.target.value);
+            }}
+            onBlur={formik.handleBlur}
             placeholder="Password"
             aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
           />
