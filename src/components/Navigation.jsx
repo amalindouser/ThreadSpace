@@ -36,7 +36,7 @@ function Navigation({ logout }) {
 
       <Heading as="h1" fontSize="3xl" marginLeft="2px">
         <ChakraLink as={RouterLink} to="/" color="black">
-          ThreadSpace
+          ThreadSpace App
         </ChakraLink>
       </Heading>
 
