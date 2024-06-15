@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
   Box,
@@ -11,6 +12,7 @@ import {
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import PropTypes from 'prop-types';
 import { useFormik } from 'formik';
+import useInput from '../hooks/useInput';
 
 // Function to validate email format
 function validateEmail(email) {
@@ -21,6 +23,9 @@ function validateEmail(email) {
 export default function LoginInput({ login }) {
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const email = useInput('');
+  const password = useInput('');
 
   const handleClickVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -50,8 +55,15 @@ export default function LoginInput({ login }) {
     },
     onSubmit: (values, { setSubmitting }) => {
       login(values)
+        .then(() => {
+          setErrorMessage('');
+          email.resetValue(); // Reset email input
+          password.resetValue(); // Reset password input
+        })
         .catch((error) => {
-          setErrorMessage(error.message);
+          setErrorMessage('Invalid email or password'); // Set custom error message
+        })
+        .finally(() => {
           setSubmitting(false);
         });
     },
@@ -60,11 +72,16 @@ export default function LoginInput({ login }) {
   return (
     <Box as="form" onSubmit={formik.handleSubmit} bg="white" p={4} borderRadius="md">
       <FormControl mt={4} id="email" isRequired isInvalid={formik.touched.email && formik.errors.email}>
-        <FormLabel color="black">Email address</FormLabel>
+        <FormLabel>Email address</FormLabel>
         <Input
           type="email"
           focusBorderColor="#63B3ED"
-          {...formik.getFieldProps('email')}
+          value={email.value}
+          onChange={(e) => {
+            email.handleValueChange(e);
+            formik.setFieldValue('email', e.target.value);
+          }}
+          onBlur={formik.handleBlur}
           placeholder="Email"
           aria-invalid={formik.touched.email && formik.errors.email ? 'true' : 'false'}
         />
@@ -73,12 +90,17 @@ export default function LoginInput({ login }) {
         )}
       </FormControl>
       <FormControl mt={4} id="password" isRequired isInvalid={formik.touched.password && formik.errors.password}>
-        <FormLabel color="black">Password</FormLabel>
+        <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
             type={showPassword ? 'text' : 'password'}
             focusBorderColor="#63B3ED"
-            {...formik.getFieldProps('password')}
+            value={password.value}
+            onChange={(e) => {
+              password.handleValueChange(e);
+              formik.setFieldValue('password', e.target.value);
+            }}
+            onBlur={formik.handleBlur}
             placeholder="Password"
             aria-invalid={formik.touched.password && formik.errors.password ? 'true' : 'false'}
           />
@@ -100,8 +122,15 @@ export default function LoginInput({ login }) {
       {errorMessage && (
         <Box color="red.500" mt={2} className="error-message">{errorMessage}</Box>
       )}
-      <Button w="full" mt="6" colorScheme="teal" variant="solid" type="submit">
-        Log In
+      <Button
+        w="full"
+        mt="6"
+        colorScheme="teal"
+        variant="solid"
+        type="submit"
+        disabled={formik.isSubmitting}
+      >
+        Login
       </Button>
     </Box>
   );

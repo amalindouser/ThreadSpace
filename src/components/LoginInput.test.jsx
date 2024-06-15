@@ -51,7 +51,7 @@ describe('LoginInput component', () => {
     await typeIntoInput('Email', 'email@gmail.com');
     await typeIntoInput('Password', 'inipasswordtest');
 
-    const loginButton = screen.getByRole('button', { name: 'Log In' });
+    const loginButton = screen.getByRole('button', { name: 'Login' });
     await waitFor(() => {
       fireEvent.click(loginButton);
     });

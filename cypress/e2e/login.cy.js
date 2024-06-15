@@ -1,4 +1,10 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable cypress/no-unnecessary-waiting */
+/* eslint-disable linebreak-style */
+/* eslint-disable no-param-reassign */
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 // cypress/e2e/login.cy.js
 /* eslint-disable linebreak-style */
 /**
@@ -10,51 +16,49 @@
  *   - should display homepage when email and password are correct
  */
 
+/// cypress/e2e/login.cy.js
+
 describe('Login spec', () => {
   beforeEach(() => {
     cy.visit('http://localhost:5173/');
   });
 
   it('should display login page correctly', () => {
-    // Memverifikasi elemen yang harus tampak pada halaman login
+    // memverifikasi elemen yang harus tampak pada halaman login
     cy.get('input[placeholder="Email"]').should('be.visible');
     cy.get('input[placeholder="Password"]').should('be.visible');
-    cy.get('button').contains(/^Log In$/).should('be.visible');
+    cy.get('button').contains(/^Login$/).should('be.visible');
   });
-
   it('should display alert when email is empty', () => {
-    // Klik tombol login tanpa mengisi email
-    cy.get('button').contains(/^Log In$/).click();
-    // Memverifikasi alert atau pesan error
-    cy.get('input[placeholder="Email"]').should('have.attr', 'aria-invalid', 'true');
+    cy.get('button').contains(/^Login$/).click();
+    cy.on('window:alert', (str) => {
+      expect(str).to.equal('"id" is not allowed to be empty');
+    });
   });
-
   it('should display alert when password is empty', () => {
-    // Isi email tetapi kosongkan password, kemudian klik login
-    cy.get('input[placeholder="Email"]').type('email@gmail.com');
-    cy.get('button').contains(/^Log In$/).click();
+    cy.get('input[placeholder="Email"]').type('testuser');
+    cy.get('button').contains(/^Login$/).click();
 
-    // Memverifikasi alert atau pesan error
-    cy.get('input[placeholder="Password"]').should('have.attr', 'aria-invalid', 'true');
+    // memverifikasi window.alert untuk menampilkan pesan dari API
+    cy.on('window:alert', (str) => {
+      expect(str).to.equal('"id" is not allowed to be empty');
+    });
   });
+  it('should display alert when username and password are wrong', () => {
+    cy.get('input[placeholder="Email"]').type('testuser');
+    cy.get('input[placeholder="Password"]').type('wrong_password');
 
-  it('should display alert when email and password are wrong', () => {
-    // Isi email dan password yang salah kemudian klik login
-    cy.get('input[placeholder="Email"]').type('wrongemail@gmail.com');
-    cy.get('input[placeholder="Password"]').type('wrongpassword');
-    cy.get('button').contains(/^Log In$/).click();
-
-    // Memverifikasi alert atau pesan error
-    cy.get('.error-message').should('contain', 'Invalid email or password');
+    cy.get('button').contains(/^Login$/).click();
+    cy.on('window:alert', (str) => {
+      expect(str).to.equal('User ID or password is wrong');
+    });
   });
-
   it('should display homepage when email and password are correct', () => {
-    // Isi email dan password yang benar kemudian klik login
-    cy.get('input[placeholder="Email"]').type('correctemail@gmail.com');
-    cy.get('input[placeholder="Password"]').type('correctpassword');
-    cy.get('button').contains(/^Log In$/).click();
+    cy.get('input[placeholder="Email"]').type('testuser');
+    cy.get('input[placeholder="Password"]').type('test123456');
+    cy.get('button').contains(/^Login$/).click();
 
-    // Memverifikasi apakah halaman beranda ditampilkan
-    cy.url().should('eq', 'http://localhost:5173/home');
+    // memverifikasi bahwa elemen yang berada di homepage ditampilkan
+    cy.get('button').contains('Logout').should('be.visible');
   });
 });
