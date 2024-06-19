@@ -12,7 +12,7 @@ function useInput(defaultValue = '') {
   }, [defaultValue]);
 
   // Menggunakan object destructuring di sini
-  return { value, handleValueChange, resetValue };
+  return { value, , resetValue };
 }
 
 export default useInput;
