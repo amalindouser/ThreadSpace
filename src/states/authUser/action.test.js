@@ -2,6 +2,23 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable linebreak-style */
 /* eslint-disable indent */
+/**
+ * Test scenarios for the asyncSetAuthUser thunk
+ *
+ * - asyncSetAuthUser thunk
+ *   - should store accessToken in local storage when user login
+ *   - should dispatch action correctly when data fetching success
+ *   - should dispatch action and call console.error correctly when data fetching failed
+ */
+
+/**
+ * Test scenarios for the asyncUnsetAuthUser thunk
+ *
+ * - asyncUnsetAuthUser thunk
+ *   - accessToken in local storage should be an empty string when user logout
+ *   - should dispatch action correctly when user logout
+ */
+
 import {
     afterEach, beforeEach, describe, expect, it, vi,
   } from 'vitest';

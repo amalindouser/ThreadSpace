@@ -1,6 +1,17 @@
+/* eslint-disable no-multiple-empty-lines */
 /* eslint-disable linebreak-style */
 /* eslint-disable comma-dangle */
 /* eslint-disable linebreak-style */
+
+
+/**
+ * Test scenarios for the NotFoundThread component
+ *
+ * - NotFoundThread component
+ *   - should redirect to the homepage when the link is clicked
+ */
+
+
 import React from 'react';
 import {
   render, screen, fireEvent, waitFor
